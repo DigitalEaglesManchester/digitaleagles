@@ -193,6 +193,7 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
 
     @Override
     public void onResults(Bundle results) {
+        //add stuff
         speech.startListening(recognizerIntent);
         Log.i(LOG_TAG, "onResults");
         ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
