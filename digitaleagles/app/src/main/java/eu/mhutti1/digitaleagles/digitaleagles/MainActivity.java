@@ -3,6 +3,7 @@ package eu.mhutti1.digitaleagles.digitaleagles;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, RecognitionListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -155,6 +156,51 @@ public class MainActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onReadyForSpeech(Bundle params) {
+
+    }
+
+    @Override
+    public void onBeginningOfSpeech() {
+
+    }
+
+    @Override
+    public void onRmsChanged(float rmsdB) {
+
+    }
+
+    @Override
+    public void onBufferReceived(byte[] buffer) {
+
+    }
+
+    @Override
+    public void onEndOfSpeech() {
+
+    }
+
+    @Override
+    public void onError(int error) {
+
+    }
+
+    @Override
+    public void onResults(Bundle results) {
+
+    }
+
+    @Override
+    public void onPartialResults(Bundle partialResults) {
+
+    }
+
+    @Override
+    public void onEvent(int eventType, Bundle params) {
+
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -194,6 +240,7 @@ public class MainActivity extends ActionBarActivity
                     break;
                 case 3:
                     rootView = inflater.inflate(R.layout.screen3, container, false);
+                    openMap();
                     break;
                 default:
                     rootView = inflater.inflate(R.layout.screen1, container, false);
@@ -203,7 +250,16 @@ public class MainActivity extends ActionBarActivity
             return rootView;
 
         }
+        //Jacques
+        public void openMap(){
 
+        }
+
+
+
+
+
+        //End Jacques
 
         @Override
         public void onAttach(Activity activity) {
@@ -212,5 +268,7 @@ public class MainActivity extends ActionBarActivity
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
+
+
 
 }
