@@ -252,7 +252,12 @@ public class MainActivity extends ActionBarActivity
         }
         //Jacques
         public void openMap(){
-
+            /*
+            test
+            test
+            test
+            test
+             */
         }
 
 
