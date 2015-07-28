@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,11 +32,11 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
     private SpeechRecognizer speech = null;
     private Intent recognizerIntent;
     private String LOG_TAG = "VoiceRecognitionActivity";
-
+    public Boolean toggle =true;
     public TextView demoOutput;
 
     private final int REQ_CODE_SPEECH_INPUT = 100;
-    public Button b;
+    public ImageButton b;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -47,7 +49,7 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
     @Override
     public void onResume() {
         super.onResume();
-        b=(Button)thisActivity.findViewById(R.id.button);
+        b=(ImageButton)thisActivity.findViewById(R.id.imageButton);
         b.setOnClickListener(new View.OnClickListener(){
             public void onClick(View viewer) {
                 demoButton();
@@ -68,7 +70,43 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
     }
     private void promptSpeechInput() {
 
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        if (toggle) {
+            speech = SpeechRecognizer.createSpeechRecognizer(thisActivity);
+            speech.setRecognitionListener(this);
+            recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en");
+            recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, thisActivity.getPackageName());
+            recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
+            recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
+            speech.startListening(recognizerIntent);
+            toggle = false;
+        }else
+        {
+            speech.destroy();
+            toggle = true;
+        }
+        //toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            //@Override
+            //public void onCheckedChanged(CompoundButton buttonView,
+                                       //  boolean isChecked) {
+              //  if (isChecked) {
+                    //progressBar.setVisibility(View.VISIBLE);
+                    //progressBar.setIndeterminate(true);
+
+               // }/* else {
+                   // progressBar.setIndeterminate(false);
+                   // progressBar.setVisibility(View.INVISIBLE);
+                    //speech.stopListening();
+            //    }
+         //   }
+      //  });*/
+
+
+
+
+
+        /*Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
@@ -80,8 +118,9 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
             Toast.makeText(thisActivity.getApplicationContext(),
                     getString(R.string.speech_not_supported),
                     Toast.LENGTH_SHORT).show();
-        }
+        }*/
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -96,7 +135,8 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
 
                     // demoOutput.setText(word);
                     Toast.makeText(thisActivity.getApplicationContext(), result.get(0), Toast.LENGTH_SHORT).show();
-
+                    TextView t = (TextView)thisActivity.findViewById(R.id.textView);
+                    t.setText(result.get(0));
                     // }
                     // demoOutput.setText(result.get(0));
                 }
@@ -121,7 +161,7 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
     public void onPause() {
         super.onPause();
         if (speech != null) {
-            speech.destroy();
+            //speech.destroy();
             Log.i(LOG_TAG, "destroy");
         }
 
@@ -144,14 +184,25 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
     }
 
     @Override
-    public void onError(int error) {
-
+    public void onError(int errorCode) {
+        String errorMessage = getErrorText(errorCode);
+        Log.d(LOG_TAG, "FAILED " + errorMessage);
+        //returnedText.setText(errorMessage);
+        //toggleButton.setChecked(false);
     }
 
     @Override
     public void onResults(Bundle results) {
-
+        speech.startListening(recognizerIntent);
+        Log.i(LOG_TAG, "onResults");
+        ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+        String text = matches.get(0);
+        Toast.makeText(thisActivity.getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+        TextView t = (TextView)thisActivity.findViewById(R.id.textView);
+        t.setText(text);
+       // returnedText.setText(matches.get(0));
     }
+
 
     @Override
     public void onPartialResults(Bundle partialResults) {
