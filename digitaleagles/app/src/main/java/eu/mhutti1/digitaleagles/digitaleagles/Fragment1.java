@@ -30,15 +30,24 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
                              Bundle savedInstanceState) {
         View rootView;
         rootView = inflater.inflate(R.layout.screen1, container, false);
-       /* b=(Button)thisActivity.findViewById(R.id.button);
-        b.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View viewer){
-                demoButton();
-
-        });*/
+        /**/
 
         return rootView;
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        b=(Button)thisActivity.findViewById(R.id.button);
+        b.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View viewer) {
+                demoButton();
+            }
+
+            });
+    }
+
+
+
     public void demoButton(){
         //demoOutput.setText("hi");
         promptSpeechInput();

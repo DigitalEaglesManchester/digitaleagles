@@ -45,7 +45,6 @@ public class MainActivity extends NavigationControl {
 
 
 
-
     /**
      * A placeholder fragment containing a simple view.
      */

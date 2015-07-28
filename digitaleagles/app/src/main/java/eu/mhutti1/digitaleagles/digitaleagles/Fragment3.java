@@ -17,4 +17,9 @@ public class
         rootView = inflater.inflate(R.layout.screen3, container, false);
         return rootView;
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
 }
