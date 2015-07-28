@@ -250,6 +250,20 @@ public class MainActivity extends ActionBarActivity
             return rootView;
 
         }
+        /*
+
+        test
+        test
+        test
+        test
+        test
+        test
+        test
+        test
+        test
+
+
+        */
         //Jacques
         public void openMap(){
             /*
