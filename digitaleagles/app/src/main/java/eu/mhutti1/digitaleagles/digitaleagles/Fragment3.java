@@ -35,7 +35,10 @@ public class Fragment3 extends NavigationControl.PlaceholderFragment implements 
     @Override
     public void onResume() {
         super.onResume();
-        GoogleMap  mapFragment = (GoogleMap) thisActivity.findViewById(R.id.map);
-        mapFragment.getMapAsync(this);
+        if (getFragmentManager().findFragmentById(R.id.map)!=null) {
+            SupportMapFragment mapFragment = (SupportMapFragment) getFragmentManager()
+                    .findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
+        }
     }
 }
