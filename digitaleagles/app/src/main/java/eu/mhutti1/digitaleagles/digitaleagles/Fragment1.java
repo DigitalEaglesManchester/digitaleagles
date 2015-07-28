@@ -6,12 +6,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
+
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -19,6 +24,12 @@ import java.util.Locale;
  * Created by Isaac on 28/07/2015.
  */
 public class Fragment1 extends NavigationControl.PlaceholderFragment  implements RecognitionListener {
+    private TextView returnedText;
+    private ToggleButton toggleButton;
+    private ProgressBar progressBar;
+    private SpeechRecognizer speech = null;
+    private Intent recognizerIntent;
+    private String LOG_TAG = "VoiceRecognitionActivity";
 
     public TextView demoOutput;
 
@@ -102,18 +113,30 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
 
     @Override
     public void onBeginningOfSpeech() {
+        Log.i(LOG_TAG, "onBeginningOfSpeech");
+        //progressBar.setIndeterminate(false);
+        //progressBar.setMax(10);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (speech != null) {
+            speech.destroy();
+            Log.i(LOG_TAG, "destroy");
+        }
 
     }
-
     @Override
     public void onRmsChanged(float rmsdB) {
-
+        Log.i(LOG_TAG, "onRmsChanged: " + rmsdB);
+        //progressBar.setProgress((int) rmsdB);
     }
 
     @Override
     public void onBufferReceived(byte[] buffer) {
-
+        Log.i(LOG_TAG, "onBufferReceived: " + buffer);
     }
+
 
     @Override
     public void onEndOfSpeech() {
@@ -138,5 +161,41 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
     @Override
     public void onEvent(int eventType, Bundle params) {
 
+    }
+    public static String getErrorText(int errorCode) {
+        String message;
+        switch (errorCode) {
+            case SpeechRecognizer.ERROR_AUDIO:
+                message = "Audio recording error";
+                break;
+            case SpeechRecognizer.ERROR_CLIENT:
+                message = "Client side error";
+                break;
+            case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
+                message = "Insufficient permissions";
+                break;
+            case SpeechRecognizer.ERROR_NETWORK:
+                message = "Network error";
+                break;
+            case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
+                message = "Network timeout";
+                break;
+            case SpeechRecognizer.ERROR_NO_MATCH:
+                message = "No match";
+                break;
+            case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
+                message = "RecognitionService busy";
+                break;
+            case SpeechRecognizer.ERROR_SERVER:
+                message = "error from server";
+                break;
+            case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
+                message = "No speech input";
+                break;
+            default:
+                message = "Didn't understand, please try again.";
+                break;
+        }
+        return message;
     }
 }
