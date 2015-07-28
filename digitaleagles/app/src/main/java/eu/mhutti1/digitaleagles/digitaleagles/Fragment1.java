@@ -1,8 +1,8 @@
 package eu.mhutti1.digitaleagles.digitaleagles;
 
-import android.app.Fragment;
-import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
@@ -11,8 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -20,7 +18,6 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 /**
  * Created by Isaac on 28/07/2015.
@@ -56,9 +53,16 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
             }
 
             });
+        t = (TextView)thisActivity.findViewById(R.id.textView);
+        AudioManager amanager=(AudioManager)thisActivity.getSystemService(Context.AUDIO_SERVICE);
+        //amanager.setStreamMute(AudioManager.STREAM_NOTIFICATION, true);
+        //amanager.setStreamMute(AudioManager.STREAM_ALARM, true);
+        amanager.setStreamMute(AudioManager.STREAM_MUSIC, true);
+        //amanager.setStreamMute(AudioManager.STREAM_RING, true);
+        //amanager.setStreamMute(AudioManager.STREAM_SYSTEM, true);
     }
 
-
+    public TextView t;
 
     public void demoButton(){
         //demoOutput.setText("hi");
@@ -68,17 +72,26 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
 
 
     }
+    private void startSpeech(){
+        speech = SpeechRecognizer.createSpeechRecognizer(thisActivity);
+        speech.setRecognitionListener(this);
+        recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en");
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, thisActivity.getPackageName());
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
+            /*recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 5000);
+            recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 5000);*/
+        speech.startListening(recognizerIntent);
+
+    }
     private void promptSpeechInput() {
 
+
         if (toggle) {
-            speech = SpeechRecognizer.createSpeechRecognizer(thisActivity);
-            speech.setRecognitionListener(this);
-            recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-            recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en");
-            recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, thisActivity.getPackageName());
-            recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
-            recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
-            speech.startListening(recognizerIntent);
+           startSpeech();
+
             toggle = false;
         }else
         {
@@ -135,7 +148,7 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
 
                     // demoOutput.setText(word);
                     Toast.makeText(thisActivity.getApplicationContext(), result.get(0), Toast.LENGTH_SHORT).show();
-                    TextView t = (TextView)thisActivity.findViewById(R.id.textView);
+
                     t.setText(result.get(0));
                     // }
                     // demoOutput.setText(result.get(0));
@@ -187,6 +200,7 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
     public void onError(int errorCode) {
         String errorMessage = getErrorText(errorCode);
         Log.d(LOG_TAG, "FAILED " + errorMessage);
+        speech.startListening(recognizerIntent);
         //returnedText.setText(errorMessage);
         //toggleButton.setChecked(false);
     }
@@ -198,8 +212,8 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
         Log.i(LOG_TAG, "onResults");
         ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
         String text = matches.get(0);
-        Toast.makeText(thisActivity.getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-        TextView t = (TextView)thisActivity.findViewById(R.id.textView);
+        //Toast.makeText(thisActivity.getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+
         t.setText(text);
        // returnedText.setText(matches.get(0));
     }
@@ -207,14 +221,16 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
 
     @Override
     public void onPartialResults(Bundle partialResults) {
+        ArrayList<String> matches = partialResults.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
 
+        t.setText(matches.get(0));
     }
 
     @Override
     public void onEvent(int eventType, Bundle params) {
 
     }
-    public static String getErrorText(int errorCode) {
+    public  String getErrorText(int errorCode) {
         String message;
         switch (errorCode) {
             case SpeechRecognizer.ERROR_AUDIO:
@@ -234,9 +250,12 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
                 break;
             case SpeechRecognizer.ERROR_NO_MATCH:
                 message = "No match";
+
                 break;
             case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
                 message = "RecognitionService busy";
+                speech.destroy();
+                startSpeech();
                 break;
             case SpeechRecognizer.ERROR_SERVER:
                 message = "error from server";
