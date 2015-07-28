@@ -14,7 +14,6 @@
         android:layout_height="279dp"
         android:text="Button"
         android:id="@+id/button"
-        android:onClick="demoButton"
         android:layout_gravity="right|center_vertical"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
