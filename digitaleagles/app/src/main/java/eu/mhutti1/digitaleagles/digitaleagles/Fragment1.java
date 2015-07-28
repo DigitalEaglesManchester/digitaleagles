@@ -11,7 +11,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,9 +33,12 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
     private String LOG_TAG = "VoiceRecognitionActivity";
     public Boolean toggle =true;
     public TextView demoOutput;
-
+    public String[] textArray;
+    ArrayAdapter<String> listAdapter;
     private final int REQ_CODE_SPEECH_INPUT = 100;
     public ImageButton b;
+    public ListView list;
+    public ArrayList<String> textList;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,6 +65,12 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
         amanager.setStreamMute(AudioManager.STREAM_MUSIC, true);
         //amanager.setStreamMute(AudioManager.STREAM_RING, true);
         //amanager.setStreamMute(AudioManager.STREAM_SYSTEM, true);
+        list = (ListView) thisActivity.findViewById(R.id.listView);
+        textList = new ArrayList<String>();
+        listAdapter = new ArrayAdapter<String>(thisActivity, android.R.layout.simple_list_item_1, textList);
+
+        list.setAdapter(listAdapter);
+
     }
 
     public TextView t;
@@ -213,8 +224,10 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
         ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
         String text = matches.get(0);
         //Toast.makeText(thisActivity.getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+       listAdapter.add(text.toString());
+        listAdapter.notifyDataSetChanged();
 
-        t.setText(text);
+        //t.setText(text);
        // returnedText.setText(matches.get(0));
     }
 
@@ -223,7 +236,7 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
     public void onPartialResults(Bundle partialResults) {
         ArrayList<String> matches = partialResults.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
 
-        t.setText(matches.get(0));
+       t.setText(matches.get(0));
     }
 
     @Override
