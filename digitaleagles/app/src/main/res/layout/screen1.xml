@@ -37,6 +37,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageButton"
         android:layout_toRightOf="@+id/button"
-        android:src="@drawable/listen-button1" />
+        android:src="@drawable/listen_button1" />
 
 </RelativeLayout>
