@@ -5,7 +5,7 @@ package eu.mhutti1.digitaleagles.digitaleagles;
  */
 public class DBResponseBean
 {
-    private int response_id;
+    private String response_id;
     private String response;
     private String date;
     private String time;
@@ -21,6 +21,7 @@ public class DBResponseBean
     public DBResponseBean( String response, String date, String time, String latitude, String longitude)
     {
        // this.response_id = response_id;
+        response = response.replace("'","*");
         this.response = response;
         this.date = date;
         this.time = time;
@@ -28,7 +29,17 @@ public class DBResponseBean
         this.longitude = longitude;
 
     }
+    public DBResponseBean(String response_id, String response, String date, String time, String latitude, String longitude)
+    {
+        this.response_id = response_id;
+        response = response.replace("'","*");
+        this.response = response;
+        this.date = date;
+        this.time = time;
+        this.latitude = latitude;
+        this.longitude = longitude;
 
+    }
   /*  public int getResponse_id()
     {
         return response_id;

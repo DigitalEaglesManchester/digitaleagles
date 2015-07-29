@@ -103,7 +103,8 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
 
     }
     private void promptSpeechInput() {
-        dataService.debug();
+        DBResponseBean a = dataService.getResponse(0);
+        Log.i("goodtest0",a.getResponse());
         if (toggle) {
            startSpeech();
 
@@ -177,7 +178,7 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
        listAdapter.add(text.toString());
         listAdapter.notifyDataSetChanged();
         DBResponseBean bean = new DBResponseBean(text,"monday","midday","warrington","warrington");
-
+        dataService.addResponse(bean);
         //t.setText(text);
        // returnedText.setText(matches.get(0));
     }

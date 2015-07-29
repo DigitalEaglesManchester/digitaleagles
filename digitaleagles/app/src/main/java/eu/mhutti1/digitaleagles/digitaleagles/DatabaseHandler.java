@@ -59,10 +59,27 @@ public class DatabaseHandler extends SQLiteOpenHelper
         return response;
     }
     public void addResponse(DBResponseBean bean){
-        data.execSQL("INSERT INTO " + tblName + " (" + colID + ", " + colResponse + ", " + colDate + ", " + colTime + ", " + colLat + ", " + colLong + ") VALUES ('', '"+bean.getResponse()+"', '"+bean.getDate()+"','"+bean.getTime()+"','"+bean.getLatitude()+"','"+bean.getLongitude()+"')");
+        data.execSQL("INSERT INTO " + tblName + " ("+colResponse + ", " + colDate + ", " + colTime + ", " + colLat + ", " + colLong + ") VALUES ('"+bean.getResponse()+"', '"+bean.getDate()+"','"+bean.getTime()+"','"+bean.getLatitude()+"','"+bean.getLongitude()+"')");
     }
 
+    public DBResponseBean getResponse(int id){
+        DBResponseBean myBean = new DBResponseBean();
+        ArrayList<String> bean = new ArrayList<String>();
+        Cursor c = data.rawQuery("SELECT * FROM " + tblName + " WHERE "+ colID + " = "+id+"", null);
+        //Cursor c = data.rawQuery("SELECT * FROM " + tblName, null);
+        if (c.moveToFirst()) {
+            while (!c.isAfterLast()) {
+                //bean.add(c.getString(c.getColumnIndex(colResponse)));
 
+
+                //Log.i("mytag", c.getString(0));
+                myBean = new DBResponseBean(String.valueOf( c.getInt(0)),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5));
+                c.moveToNext();
+            }
+        }
+
+        return myBean;
+    }
     }
     /*
         Write CRUD methods below using
