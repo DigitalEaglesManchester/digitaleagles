@@ -12,10 +12,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-/**
- * Created by Isaac on 28/07/2015.
- */
-
 public class Fragment3 extends NavigationControl.PlaceholderFragment implements OnMapReadyCallback {
 
     @Override
@@ -35,10 +31,12 @@ public class Fragment3 extends NavigationControl.PlaceholderFragment implements 
     @Override
     public void onResume() {
         super.onResume();
-        if (getFragmentManager().findFragmentById(R.id.map)!=null) {
-            SupportMapFragment mapFragment = (SupportMapFragment) getFragmentManager()
-                    .findFragmentById(R.id.map);
+        if (thisActivity.getFragmentManager().findFragmentById(R.id.map)!=null) {
+            SupportMapFragment mapFragment = (SupportMapFragment) getFragmentManager().findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
+            LatLng sydney = new LatLng(-34, 151);
+            mapFragment.getMap().addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+            mapFragment.getMap().moveCamera(CameraUpdateFactory.newLatLng(sydney));
         }
     }
 }
