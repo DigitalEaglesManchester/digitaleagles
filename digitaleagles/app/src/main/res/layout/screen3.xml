@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:id="@+id/map"
         tools:context=".Fragment3"
-        android:name="com.google.android.gms.maps.SupportMapFragment" />
+        android:name="com.google.android.gms.maps.MapFragment" />
 
     <LinearLayout
         android:orientation="vertical"
