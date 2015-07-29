@@ -5,7 +5,8 @@ import android.os.Bundle;
 
 
 
-public class MainActivity extends NavigationControl {
+public class MainActivity extends NavigationControl
+{
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -19,13 +20,12 @@ public class MainActivity extends NavigationControl {
     private CharSequence mTitle;
     public String test;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
 
     }
-
-
 
     /**
      * A placeholder fragment containing a simple view.

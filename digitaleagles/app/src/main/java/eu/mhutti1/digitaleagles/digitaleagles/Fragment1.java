@@ -56,7 +56,6 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
             public void onClick(View viewer) {
                 demoButton();
             }
-
             });
         t = (TextView)thisActivity.findViewById(R.id.textView);
         AudioManager amanager=(AudioManager)thisActivity.getSystemService(Context.AUDIO_SERVICE);
@@ -218,6 +217,7 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
 
     @Override
     public void onResults(Bundle results) {
+        thisActivity.getApplicationContext().startService(new Intent(thisActivity.getApplicationContext(), TimeDateService.class));
         //add stuff
         speech.startListening(recognizerIntent);
         Log.i(LOG_TAG, "onResults");
