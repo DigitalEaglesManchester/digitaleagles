@@ -1,7 +1,7 @@
 package eu.mhutti1.digitaleagles.digitaleagles;
 
-import android.app.FragmentManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +10,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.OnMapReadyCallback;;
-import com.google.android.gms.maps.SupportMapFragment;
+;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -28,8 +27,8 @@ public class Fragment3 extends NavigationControl.PlaceholderFragment {
         return rootView;
     }
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
             map = ((MapFragment) thisActivity.getFragmentManager().findFragmentById(R.id.map)).getMap();
         for(int i=1; i< Lat.length; i++){
             LatLng Loc = new LatLng(Lat[i], Lng[i]);
@@ -48,7 +47,12 @@ public class Fragment3 extends NavigationControl.PlaceholderFragment {
                 }
 
             });
-
+            GetData data = new GetData();
+            String [] LatLong = data.findLocation();
+            String Date = data.getDate();
+            String Time  = data.getTime();
+            Log.i("test",Date);
+            Log.i("test", Time);
         }
     }
 }
