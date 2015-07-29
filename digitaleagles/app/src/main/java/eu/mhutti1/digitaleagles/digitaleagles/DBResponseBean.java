@@ -9,8 +9,8 @@ public class DBResponseBean
     private String response;
     private String date;
     private String time;
-    private double latitude;
-    private double longitude;
+    private String latitude;
+    private String longitude;
 
 
     public DBResponseBean()
@@ -18,9 +18,9 @@ public class DBResponseBean
 
     }
 
-    public DBResponseBean(int response_id, String response, String date, String time, double latitude, double longitude)
+    public DBResponseBean( String response, String date, String time, String latitude, String longitude)
     {
-        this.response_id = response_id;
+       // this.response_id = response_id;
         this.response = response;
         this.date = date;
         this.time = time;
@@ -29,16 +29,16 @@ public class DBResponseBean
 
     }
 
-    public int getResponse_id()
+  /*  public int getResponse_id()
     {
         return response_id;
-    }
+    }*/
 
-    public void setResponse_id(int response_id)
+   /* public void setResponse_id(int response_id)
     {
         this.response_id = response_id;
     }
-
+*/
     public String getResponse()
     {
         return response;
@@ -69,22 +69,22 @@ public class DBResponseBean
         this.time = time;
     }
 
-    public double getLatitude()
+    public String getLatitude()
     {
         return latitude;
     }
 
-    public void setLatitude(double latitude)
+    public void setLatitude(String latitude)
     {
         this.latitude = latitude;
     }
 
-    public double getLongitude()
+    public String getLongitude()
     {
         return longitude;
     }
 
-    public void setLongitude(double longitude)
+    public void setLongitude(String longitude)
     {
         this.longitude = longitude;
     }

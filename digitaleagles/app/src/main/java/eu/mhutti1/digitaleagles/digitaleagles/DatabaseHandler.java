@@ -1,8 +1,12 @@
 package eu.mhutti1.digitaleagles.digitaleagles;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import java.util.ArrayList;
 
 /**
  * Created by tony on 28/07/2015.
@@ -17,7 +21,7 @@ public class DatabaseHandler extends SQLiteOpenHelper
     private static final String colTime="time";
     private static final String colLat="latitude";
     private static final String colLong="longitude";
-
+    SQLiteDatabase data;
 
     public DatabaseHandler(Context context)
     {
@@ -27,7 +31,9 @@ public class DatabaseHandler extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase db) //Create tables and columns
     {
-        db.execSQL("CREATE TABLE " + tblName + "(" + colID + " INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY, " + colResponse + " TEXT NOT NULL, " + colDate + " TEXT NULL, " + colTime + "TEXT NULL, " + colLat + " TEXT NULL, " + colLong + " TEXT NULL");
+
+        db.execSQL("CREATE TABLE " + tblName + " ( " + colID + " INTEGER AUTO_INCREMENT PRIMARY KEY, " + colResponse + " TEXT, " + colDate + " TEXT , " + colTime + " TEXT, " + colLat + " TEXT, " + colLong + " TEXT )");
+        db.execSQL("INSERT INTO " + tblName + " (" + colID + ", " + colResponse + ", " + colDate + ", " + colTime + ", " + colLat + ", " + colLong + ") VALUES ('', 'test123', 'monday','miday','mylat','mylong')");
     }
 
     @Override
@@ -39,8 +45,26 @@ public class DatabaseHandler extends SQLiteOpenHelper
         //Create the table
         onCreate(db);
     }
+    public String[] debug() {
+        String[] response = new String[100];
+        ArrayList<String> arrTblNames = new ArrayList<String>();
+        Cursor c = data.rawQuery("SELECT * FROM " + tblName + "", null);
+        if (c.moveToFirst()) {
+            while (!c.isAfterLast()) {
+                arrTblNames.add(c.getString(c.getColumnIndex(colResponse)));
+                Log.i("mytag", c.getString(c.getColumnIndex(colResponse)));
+                c.moveToNext();
+            }
+        }
+        return response;
+    }
+    public void addResponse(DBResponseBean bean){
+        data.execSQL("INSERT INTO " + tblName + " (" + colID + ", " + colResponse + ", " + colDate + ", " + colTime + ", " + colLat + ", " + colLong + ") VALUES ('', '"+bean.getResponse()+"', '"+bean.getDate()+"','"+bean.getTime()+"','"+bean.getLatitude()+"','"+bean.getLongitude()+"')");
+    }
 
+
+    }
     /*
         Write CRUD methods below using
      */
-}
+

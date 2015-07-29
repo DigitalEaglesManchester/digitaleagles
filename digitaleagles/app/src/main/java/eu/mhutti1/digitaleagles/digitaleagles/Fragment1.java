@@ -2,6 +2,7 @@ package eu.mhutti1.digitaleagles.digitaleagles;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
@@ -39,6 +40,7 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
     public ImageButton b;
     public ListView list;
     public ArrayList<String> textList;
+    public DatabaseHandler dataService;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -57,6 +59,7 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
                 demoButton();
             }
             });
+        progressBar = (ProgressBar) thisActivity.findViewById(R.id.progressBar);
         t = (TextView)thisActivity.findViewById(R.id.textView);
         AudioManager amanager=(AudioManager)thisActivity.getSystemService(Context.AUDIO_SERVICE);
         //amanager.setStreamMute(AudioManager.STREAM_NOTIFICATION, true);
@@ -69,7 +72,10 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
         listAdapter = new ArrayAdapter<String>(thisActivity, android.R.layout.simple_list_item_1, textList);
 
         list.setAdapter(listAdapter);
-
+        dataService = new DatabaseHandler(thisActivity);
+        SQLiteDatabase a = dataService.getWritableDatabase();
+        dataService.data = a;
+        //dataService.onCreate(a);
     }
 
     public TextView t;
@@ -93,12 +99,11 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
             /*recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 5000);
             recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 5000);*/
-        speech.startListening(recognizerIntent);
+        speech.startListening(recognizerIntent);;
 
     }
     private void promptSpeechInput() {
-
-
+        dataService.debug();
         if (toggle) {
            startSpeech();
 
@@ -108,66 +113,9 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
             speech.destroy();
             toggle = true;
         }
-        //toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            //@Override
-            //public void onCheckedChanged(CompoundButton buttonView,
-                                       //  boolean isChecked) {
-              //  if (isChecked) {
-                    //progressBar.setVisibility(View.VISIBLE);
-                    //progressBar.setIndeterminate(true);
-
-               // }/* else {
-                   // progressBar.setIndeterminate(false);
-                   // progressBar.setVisibility(View.INVISIBLE);
-                    //speech.stopListening();
-            //    }
-         //   }
-      //  });*/
-
-
-
-
-
-        /*Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
-                getString(R.string.speech_prompt));
-        try {
-            startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
-        } catch (ActivityNotFoundException a) {
-            Toast.makeText(thisActivity.getApplicationContext(),
-                    getString(R.string.speech_not_supported),
-                    Toast.LENGTH_SHORT).show();
-        }*/
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        switch (requestCode) {
-            case REQ_CODE_SPEECH_INPUT: {
-                if (/*resultCode == RESULT_OK &&*/ null != data) {
-
-                    ArrayList<String> result = data
-                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    //for (String word : result){
-
-                    // demoOutput.setText(word);
-                    Toast.makeText(thisActivity.getApplicationContext(), result.get(0), Toast.LENGTH_SHORT).show();
-
-                    t.setText(result.get(0));
-                    // }
-                    // demoOutput.setText(result.get(0));
-                }
-                break;
-            }
-
-        }
-    }
 
     @Override
     public void onReadyForSpeech(Bundle params) {
@@ -177,8 +125,8 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
     @Override
     public void onBeginningOfSpeech() {
         Log.i(LOG_TAG, "onBeginningOfSpeech");
-        //progressBar.setIndeterminate(false);
-        //progressBar.setMax(10);
+        progressBar.setIndeterminate(false);
+        progressBar.setMax(10);
     }
     @Override
     public void onPause() {
@@ -192,7 +140,7 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
     @Override
     public void onRmsChanged(float rmsdB) {
         Log.i(LOG_TAG, "onRmsChanged: " + rmsdB);
-        //progressBar.setProgress((int) rmsdB);
+        progressBar.setProgress((int) rmsdB);
     }
 
     @Override
@@ -219,13 +167,16 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
     public void onResults(Bundle results) {
         thisActivity.getApplicationContext().startService(new Intent(thisActivity.getApplicationContext(), TimeDateService.class));
         //add stuff
-        speech.startListening(recognizerIntent);
+        speech.destroy();
+        startSpeech();
+        //speech.startListening(recognizerIntent);
         Log.i(LOG_TAG, "onResults");
         ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
         String text = matches.get(0);
         //Toast.makeText(thisActivity.getApplicationContext(), text, Toast.LENGTH_SHORT).show();
        listAdapter.add(text.toString());
         listAdapter.notifyDataSetChanged();
+        DBResponseBean bean = new DBResponseBean(text,"monday","midday","warrington","warrington");
 
         //t.setText(text);
        // returnedText.setText(matches.get(0));
@@ -263,7 +214,8 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
                 break;
             case SpeechRecognizer.ERROR_NO_MATCH:
                 message = "No match";
-
+                speech.destroy();
+                startSpeech();
                 break;
             case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
                 message = "RecognitionService busy";
@@ -272,9 +224,13 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
                 break;
             case SpeechRecognizer.ERROR_SERVER:
                 message = "error from server";
+                speech.destroy();
+                startSpeech();
                 break;
             case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
                 message = "No speech input";
+                speech.destroy();
+                startSpeech();
                 break;
             default:
                 message = "Didn't understand, please try again.";
