@@ -65,8 +65,8 @@ public class DatabaseHandler extends SQLiteOpenHelper
     public DBResponseBean getResponse(int id){
         DBResponseBean myBean = new DBResponseBean();
         ArrayList<String> bean = new ArrayList<String>();
-        Cursor c = data.rawQuery("SELECT * FROM " + tblName + " WHERE "+ colID + " = "+id+"", null);
-        //Cursor c = data.rawQuery("SELECT * FROM " + tblName, null);
+       // Cursor c = data.rawQuery("SELECT * FROM " + tblName + " WHERE "+ colID + " = "+id+"", null);
+        Cursor c = data.rawQuery("SELECT * FROM " + tblName, null);
         if (c.moveToFirst()) {
             while (!c.isAfterLast()) {
                 //bean.add(c.getString(c.getColumnIndex(colResponse)));
