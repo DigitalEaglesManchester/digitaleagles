@@ -41,6 +41,7 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
     public ListView list;
     public ArrayList<String> textList;
     public DatabaseHandler dataService;
+    GetData dataHandler;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -76,6 +77,7 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
         SQLiteDatabase a = dataService.getWritableDatabase();
         dataService.data = a;
         //dataService.onCreate(a);
+        dataHandler = new GetData();
     }
 
     public TextView t;
@@ -103,7 +105,7 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
 
     }
     private void promptSpeechInput() {
-        DBResponseBean a = dataService.getResponse(0);
+        DBResponseBean a = dataService.getResponse(1);
         Log.i("goodtest0",a.getResponse());
         if (toggle) {
            startSpeech();
@@ -177,7 +179,7 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
         //Toast.makeText(thisActivity.getApplicationContext(), text, Toast.LENGTH_SHORT).show();
        listAdapter.add(text.toString());
         listAdapter.notifyDataSetChanged();
-        DBResponseBean bean = new DBResponseBean(text,"monday","midday","warrington","warrington");
+        DBResponseBean bean = new DBResponseBean(text,dataHandler.getDate(),dataHandler.getTime(),dataHandler.findLocation()[0],dataHandler.findLocation()[1]);
         dataService.addResponse(bean);
         //t.setText(text);
        // returnedText.setText(matches.get(0));

@@ -15,6 +15,9 @@ import java.util.Calendar;
  */
 public class GetData extends NavigationControl.PlaceholderFragment{
 
+    public GetData (){
+
+    }
     public String[] findLocation()
     {
         LocationManager lm = (LocationManager) thisActivity.getSystemService(Context.LOCATION_SERVICE);

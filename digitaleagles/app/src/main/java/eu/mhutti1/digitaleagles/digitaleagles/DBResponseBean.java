@@ -15,7 +15,12 @@ public class DBResponseBean
 
     public DBResponseBean()
     {
-
+        this.response_id = "null";
+        this.response = "null";
+        this.date = "null";
+        this.time = "null";
+        this.latitude = "null";
+        this.longitude = "null";
     }
 
     public DBResponseBean( String response, String date, String time, String latitude, String longitude)
