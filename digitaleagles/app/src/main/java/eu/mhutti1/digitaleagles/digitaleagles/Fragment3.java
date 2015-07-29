@@ -5,23 +5,21 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class Fragment3 extends NavigationControl.PlaceholderFragment implements OnMapReadyCallback {
+public class Fragment3 extends NavigationControl.PlaceholderFragment {
     GoogleMap map;
-    @Override
-    public void onMapReady(GoogleMap map) {
-        // Add a marker in Sydney, Australia, and move the camera.
-        LatLng sydney = new LatLng(-34, 151);
-        map.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-    }
+    double[] Lat = {1,2,3,4,5,6,7,8,9,10};
+    double[] Lng = {1,2,3,4,5,6,7,8,9,10};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,11 +30,25 @@ public class Fragment3 extends NavigationControl.PlaceholderFragment implements 
     @Override
     public void onResume() {
         super.onResume();
-
             map = ((MapFragment) thisActivity.getFragmentManager().findFragmentById(R.id.map)).getMap();
-            LatLng sydney = new LatLng(-34, 151);
-            map.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-            map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-      //  }
+        for(int i=1; i< Lat.length; i++){
+            LatLng Loc = new LatLng(Lat[i], Lng[i]);
+            map.addMarker(new MarkerOptions().position(Loc).title("Marker"));
+            map.moveCamera(CameraUpdateFactory.newLatLng(Loc));
+
+            map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+
+                @Override
+                public boolean onMarkerClick(Marker arg0) {
+                    if (arg0.getTitle().equals("Marker")) {
+                        Toast toast = Toast.makeText(thisActivity.getApplicationContext(), "This is a message displayed in a Toast", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                    return true;
+                }
+
+            });
+
+        }
     }
 }
