@@ -11,8 +11,8 @@ public class DBResponseBean
     private String response;
     private String date;
     private String time;
-    private String latitude;
-    private String longitude;
+    private double latitude;
+    private double longitude;
 
 
     public DBResponseBean()
@@ -21,8 +21,8 @@ public class DBResponseBean
         this.response = "null";
         this.date = "null";
         this.time = "null";
-        this.latitude = "null";
-        this.longitude = "null";
+        this.latitude = -1;
+        this.longitude = -1;
     }
 
     public DBResponseBean( String response, String date, String time, String latitude, String longitude)
@@ -32,8 +32,8 @@ public class DBResponseBean
         this.response = response;
         this.date = date;
         this.time = time;
-        this.latitude = latitude;
-        this.longitude = longitude;
+        this.latitude =  Double.parseDouble(latitude);
+        this.longitude =  Double.parseDouble(longitude);
 
     }
     public DBResponseBean(String response_id, String response, String date, String time, String latitude, String longitude)
@@ -48,8 +48,18 @@ public class DBResponseBean
         this.response = response;
         this.date = date;
         this.time = time;
-        this.latitude = latitude;
-        this.longitude = longitude;
+        try {
+            this.latitude =  Double.parseDouble(latitude);
+        } catch (NullPointerException e) {
+            Log.i("hi", "wrong");
+            this.latitude = -1;
+        }
+        try {
+            this.longitude = Double.parseDouble(longitude);
+        } catch (NullPointerException e) {
+            Log.i("hi", "wrong");
+            this.longitude = -1;
+        }
 
     }
     public int getResponse_id()
@@ -92,23 +102,23 @@ public class DBResponseBean
         this.time = time;
     }
 
-    public String getLatitude()
+    public double getLatitude()
     {
         return latitude;
     }
 
     public void setLatitude(String latitude)
     {
-        this.latitude = latitude;
+        this.latitude =  Double.parseDouble(latitude);
     }
 
-    public String getLongitude()
+    public double getLongitude()
     {
         return longitude;
     }
 
     public void setLongitude(String longitude)
     {
-        this.longitude = longitude;
+        this.longitude =  Double.parseDouble(longitude);
     }
 }

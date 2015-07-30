@@ -1,5 +1,6 @@
 package eu.mhutti1.digitaleagles.digitaleagles;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.InflateException;
@@ -18,12 +19,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Fragment3 extends NavigationControl.PlaceholderFragment {
     GoogleMap map;
-    double[] Lat = {1,2,3,4,5,6,7,8,9,10};
-    double[] Lng = {1,2,3,4,5,6,7,8,9,10};
+    //double[] Lat = {1,2,3,4,5,6,7,8,9,10};
+    //double[] Lng = {1,2,3,4,5,6,7,8,9,10};
     boolean exists = false;
     boolean count2 = true;
     View rootView;
-
+    DBResponseBean[] beans;
+    public DatabaseHandler dataService;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView != null) {
@@ -46,25 +48,7 @@ public class Fragment3 extends NavigationControl.PlaceholderFragment {
         }
 
         return rootView;
-       // try {
-                //if(exists)
-                //{
-                //    container.removeView(rootView);
 
-                //}else{
-                 //   exists = false;
-                  //  rootView = inflater.inflate(R.layout.screen3, container, false);
-                   // container.addView(rootView);
-                //}
-
-
-            //}
-
-       // }catch(InflateException ex) {
-        //    ex.printStackTrace();
-           // container.removeView(rootView);
-        //}
-        //return rootView;
 
 }
 
@@ -72,18 +56,17 @@ public class Fragment3 extends NavigationControl.PlaceholderFragment {
     public void onResume() {
         super.onResume();
             map = ((MapFragment) thisActivity.getFragmentManager().findFragmentById(R.id.map)).getMap();
-        for(int i=1; i< Lat.length; i++){
-            LatLng Loc = new LatLng(Lat[i], Lng[i]);
-            map.addMarker(new MarkerOptions().position(Loc).title("Marker"));
-            map.moveCamera(CameraUpdateFactory.newLatLng(Loc));
+        //for(int i=1; i< Lat.length; i++){
+            //LatLng Loc = new LatLng(Lat[i], Lng[i]);
+
             map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 
                 @Override
                 public boolean onMarkerClick(Marker arg0) {
-                    if (arg0.getTitle().equals("Marker")) {
+                    //if (arg0.getTitle().equals("Marker")) {
                         Toast toast = Toast.makeText(thisActivity.getApplicationContext(), "This is a message displayed in a Toast", Toast.LENGTH_SHORT);
                         toast.show();
-                    }
+                   // }
                     return true;
                 }
 
@@ -94,7 +77,19 @@ public class Fragment3 extends NavigationControl.PlaceholderFragment {
             String Time  = data.getTime();
             Log.i("test",Date);
             Log.i("test", Time);
-        }
+            dataService = new DatabaseHandler(thisActivity);
+            SQLiteDatabase a = dataService.getWritableDatabase();
+            dataService.data = a;
+            beans = dataService.getResponses(20);
+            int k = 0;
+            for (DBResponseBean bean : beans){
+                LatLng Loc = new LatLng(bean.getLatitude(), bean.getLongitude());
+                map.addMarker(new MarkerOptions().position(Loc).title(bean.getDate()));
+                map.moveCamera(CameraUpdateFactory.newLatLng(Loc));
+                k++;
+            }
+
+      //  }
     }
 
 
