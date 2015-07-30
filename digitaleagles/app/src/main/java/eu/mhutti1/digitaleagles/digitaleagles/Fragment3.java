@@ -2,6 +2,7 @@ package eu.mhutti1.digitaleagles.digitaleagles;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,22 +20,62 @@ public class Fragment3 extends NavigationControl.PlaceholderFragment {
     GoogleMap map;
     double[] Lat = {1,2,3,4,5,6,7,8,9,10};
     double[] Lng = {1,2,3,4,5,6,7,8,9,10};
+    boolean exists = false;
+    boolean count2 = true;
+    View rootView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView;
-        rootView = inflater.inflate(R.layout.screen3, container, false);
+        if (rootView != null) {
+            ViewGroup parent = (ViewGroup) rootView.getParent();
+            if (parent != null) {
+                parent.removeView(rootView);
+                Log.i("ONCREATE DEBUG", "Parent Null - View Removed");
+            }else {
+                parent.addView(rootView);
+                Log.i("ONCREATE DEBUG", "Parent NOT Null - View Added");
+            }
+        }
+        try
+        {
+            rootView = inflater.inflate(R.layout.screen3, container, false);
+        }
+        catch (InflateException e) {
+            Log.i("ONCREATE DEBUG", "INFLATE EXCEPTION CAUGHT!");
+           // parent.addView(rootView);
+        }
+
         return rootView;
-    }
+       // try {
+                //if(exists)
+                //{
+                //    container.removeView(rootView);
+
+                //}else{
+                 //   exists = false;
+                  //  rootView = inflater.inflate(R.layout.screen3, container, false);
+                   // container.addView(rootView);
+                //}
+
+
+            //}
+
+       // }catch(InflateException ex) {
+        //    ex.printStackTrace();
+           // container.removeView(rootView);
+        //}
+        //return rootView;
+
+}
+
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
             map = ((MapFragment) thisActivity.getFragmentManager().findFragmentById(R.id.map)).getMap();
         for(int i=1; i< Lat.length; i++){
             LatLng Loc = new LatLng(Lat[i], Lng[i]);
             map.addMarker(new MarkerOptions().position(Loc).title("Marker"));
             map.moveCamera(CameraUpdateFactory.newLatLng(Loc));
-
             map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 
                 @Override
@@ -55,4 +96,6 @@ public class Fragment3 extends NavigationControl.PlaceholderFragment {
             Log.i("test", Time);
         }
     }
+
+
 }
