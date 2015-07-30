@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -50,8 +52,13 @@ public class Fragment2 extends NavigationControl.PlaceholderFragment implements 
         dataService.data = a;
         textIds = new int[20];
         datetime = new String[20];
-
-        beans = dataService.getResponses(20);
+        NavigationControl act = (NavigationControl) thisActivity;
+        LatLng latng = act.latlon;
+        if (latng!=null) {
+            beans = dataService.getResponses(20, latng);
+        }else{
+            beans = dataService.getResponses(20);
+        }
 
         int i = 0;
         for (DBResponseBean bean : beans){

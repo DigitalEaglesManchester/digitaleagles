@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * Created by Isaac on 28/07/2015.
  */
@@ -28,7 +30,8 @@ public class NavigationControl extends ActionBarActivity
      */
     private CharSequence mTitle;
     public String test;
- 
+    public LatLng latlon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

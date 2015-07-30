@@ -72,6 +72,8 @@ public class Fragment3 extends NavigationControl.PlaceholderFragment {
                     fragmentManager.beginTransaction()
                             .replace(R.id.container, NavigationControl.PlaceholderFragment.newInstance(2, thisActivity))
                             .commit();
+                    NavigationControl act = (NavigationControl)thisActivity;
+                    act.latlon = arg0.getPosition();
                     // Toast toast = Toast.makeText(thisActivity.getApplicationContext(), "This is a message displayed in a Toast", Toast.LENGTH_SHORT);
                       //  toast.show();
                    // }
