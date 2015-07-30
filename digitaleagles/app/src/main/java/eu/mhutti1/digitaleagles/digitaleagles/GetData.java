@@ -6,6 +6,8 @@ import android.location.LocationManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.location.LocationListener;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -18,10 +20,20 @@ public class GetData extends NavigationControl.PlaceholderFragment{
     public GetData (){
 
     }
+
+    private final LocationListener mLocationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(final Location location) {
+            //your code here
+        }
+    };
+
     public String[] findLocation()
     {
+
         LocationManager lm = (LocationManager) thisActivity.getSystemService(Context.LOCATION_SERVICE);
         Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
         double longitude = location.getLongitude();
         double latitude = location.getLatitude();
         String slatitude = Double.toString(latitude);
