@@ -2,6 +2,8 @@ package eu.mhutti1.digitaleagles.digitaleagles;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -65,9 +67,13 @@ public class Fragment3 extends NavigationControl.PlaceholderFragment {
 
                 @Override
                 public boolean onMarkerClick(Marker arg0) {
-                    //if (arg0.getTitle().equals("Marker")) {
-                        Toast toast = Toast.makeText(thisActivity.getApplicationContext(), "This is a message displayed in a Toast", Toast.LENGTH_SHORT);
-                        toast.show();
+                   String id = arg0.getTitle();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.container, NavigationControl.PlaceholderFragment.newInstance(2, thisActivity))
+                            .commit();
+                    // Toast toast = Toast.makeText(thisActivity.getApplicationContext(), "This is a message displayed in a Toast", Toast.LENGTH_SHORT);
+                      //  toast.show();
                    // }
                     return true;
                 }
@@ -86,7 +92,7 @@ public class Fragment3 extends NavigationControl.PlaceholderFragment {
             int k = 0;
             for (DBResponseBean bean : beans){
                 LatLng Loc = new LatLng(bean.getLatitude(), bean.getLongitude());
-                map.addMarker(new MarkerOptions().position(Loc).title(bean.getDate()));
+                map.addMarker(new MarkerOptions().position(Loc).title(String.valueOf(bean.getResponse_id())));
                 map.moveCamera(CameraUpdateFactory.newLatLng(Loc));
                 k++;
             }

@@ -28,6 +28,7 @@ public class NavigationControl extends ActionBarActivity
      */
     private CharSequence mTitle;
     public String test;
+ 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

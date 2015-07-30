@@ -2,6 +2,8 @@ package eu.mhutti1.digitaleagles.digitaleagles;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.internal.widget.AdapterViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by Isaac on 28/07/2015.
@@ -64,7 +67,14 @@ public class Fragment2 extends NavigationControl.PlaceholderFragment implements 
     public void onItemClick(AdapterView<?> l, View v, int position, long id) {
 
         //Toast.makeText(thisActivity.getApplicationContext(),Integer.toString(textIds[position]), Toast.LENGTH_SHORT).show();
-
+        listAdapter.clear();
+        String response;
+        response = beans.get(position).getResponse();
+        ArrayList<String> parts = new ArrayList<String>(Arrays.asList(response.split(";")));
+        for(String part : parts){
+            listAdapter.add(part);
+        }
+        listAdapter.notifyDataSetChanged();
     }
 
 
