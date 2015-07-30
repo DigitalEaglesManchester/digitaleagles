@@ -10,7 +10,6 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -18,7 +17,6 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.ArrayList;
@@ -111,13 +109,13 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
       //  Log.i("goodtest0",a.getResponse());
         if (toggle) {
            startSpeech();
-            b.setAlpha((float)0.3);
+            b.setAlpha((float)1);
             toggle = false;
         }else
         {
             speech.destroy();
             toggle = true;
-            b.setAlpha((float)1);
+            b.setAlpha((float)0.3);
             String tesxt="";
             for (String text : textList){
                 tesxt = tesxt + text + ";";
