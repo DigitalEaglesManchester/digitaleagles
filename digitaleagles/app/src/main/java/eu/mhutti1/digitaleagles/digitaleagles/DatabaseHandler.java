@@ -32,8 +32,8 @@ public class DatabaseHandler extends SQLiteOpenHelper
     public void onCreate(SQLiteDatabase db) //Create tables and columns
     {
 
-        db.execSQL("CREATE TABLE " + tblName + " ( " + colID + " INTEGER AUTO_INCREMENT PRIMARY KEY, " + colResponse + " TEXT, " + colDate + " TEXT , " + colTime + " TEXT, " + colLat + " TEXT, " + colLong + " TEXT )");
-        db.execSQL("INSERT INTO " + tblName + " (" + colID + ", " + colResponse + ", " + colDate + ", " + colTime + ", " + colLat + ", " + colLong + ") VALUES ('', 'test123', 'monday','miday','mylat','mylong')");
+        db.execSQL("CREATE TABLE " + tblName + " ( " + colID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " + colResponse + " TEXT, " + colDate + " TEXT , " + colTime + " TEXT, " + colLat + " TEXT, " + colLong + " TEXT )");
+       // db.execSQL("INSERT INTO " + tblName + " (" + colID + ", " + colResponse + ", " + colDate + ", " + colTime + ", " + colLat + ", " + colLong + ") VALUES ('', 'test123', 'monday','miday','mylat','mylong')");
     }
 
     @Override
@@ -80,7 +80,27 @@ public class DatabaseHandler extends SQLiteOpenHelper
 
         return myBean;
     }
+    public DBResponseBean[] getResponses(int number){
+        DBResponseBean[] myBean = new DBResponseBean[number];
+        ArrayList<String> bean = new ArrayList<String>();
+        Cursor c = data.rawQuery("SELECT * FROM " + tblName +" ORDER BY "+ colID + " DESC LIMIT "+ number, null);
+        //Cursor c = data.rawQuery("SELECT * FROM " + tblName, null);
+        if (c.moveToFirst()) {
+            while (!c.isAfterLast()) {
+                //bean.add(c.getString(c.getColumnIndex(colResponse)));
+
+
+                //Log.i("mytag", c.getString(0));
+                myBean[c.getPosition()] = new DBResponseBean(String.valueOf( c.getInt(0)),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5));
+                c.moveToNext();
+            }
+        }
+
+        return myBean;
     }
+
+
+}
     /*
         Write CRUD methods below using
      */

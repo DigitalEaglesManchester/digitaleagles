@@ -105,8 +105,9 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
 
     }
     private void promptSpeechInput() {
-        DBResponseBean a = dataService.getResponse(1);
-        Log.i("goodtest0",a.getResponse());
+    //    DBResponseBean[] beanArray = dataService.getResponses(20);
+     //   DBResponseBean a = dataService.getResponse(1);
+      //  Log.i("goodtest0",a.getResponse());
         if (toggle) {
            startSpeech();
 

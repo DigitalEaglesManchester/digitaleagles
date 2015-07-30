@@ -1,11 +1,13 @@
 package eu.mhutti1.digitaleagles.digitaleagles;
 
+import android.util.Log;
+
 /**
  * Created by tony on 28/07/2015.
  */
 public class DBResponseBean
 {
-    private String response_id;
+    private int response_id;
     private String response;
     private String date;
     private String time;
@@ -15,7 +17,7 @@ public class DBResponseBean
 
     public DBResponseBean()
     {
-        this.response_id = "null";
+        this.response_id = -1;
         this.response = "null";
         this.date = "null";
         this.time = "null";
@@ -36,7 +38,12 @@ public class DBResponseBean
     }
     public DBResponseBean(String response_id, String response, String date, String time, String latitude, String longitude)
     {
-        this.response_id = response_id;
+        try {
+            this.response_id = Integer.parseInt(response_id);
+        } catch (NumberFormatException e) {
+           Log.i("hi", "wrong");
+            this.response_id = -1;
+        }
         response = response.replace("'","*");
         this.response = response;
         this.date = date;
@@ -45,16 +52,16 @@ public class DBResponseBean
         this.longitude = longitude;
 
     }
-  /*  public int getResponse_id()
+    public int getResponse_id()
     {
         return response_id;
-    }*/
-
-   /* public void setResponse_id(int response_id)
-    {
-        this.response_id = response_id;
     }
-*/
+
+    public void setResponse_id(String response_id)
+    {
+        this.response_id = Integer.getInteger(response_id);
+    }
+
     public String getResponse()
     {
         return response;
