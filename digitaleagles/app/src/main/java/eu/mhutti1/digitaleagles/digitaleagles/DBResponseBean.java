@@ -7,12 +7,12 @@ import android.util.Log;
  */
 public class DBResponseBean
 {
-    private int response_id;
-    private String response;
-    private String date;
-    private String time;
-    private double latitude;
-    private double longitude;
+    private int response_id =-1;
+    private String response ="null";
+    private String date="null";
+    private String time="null";
+    private double latitude=-1;
+    private double longitude=-1;
 
 
     public DBResponseBean()

@@ -80,8 +80,8 @@ public class DatabaseHandler extends SQLiteOpenHelper
 
         return myBean;
     }
-    public DBResponseBean[] getResponses(int number){
-        DBResponseBean[] myBean = new DBResponseBean[number];
+    public ArrayList<DBResponseBean> getResponses(int number){
+        ArrayList<DBResponseBean> myBean = new ArrayList<>();
         ArrayList<String> bean = new ArrayList<String>();
         Cursor c = data.rawQuery("SELECT * FROM " + tblName +" ORDER BY "+ colID + " DESC LIMIT "+ number, null);
         //Cursor c = data.rawQuery("SELECT * FROM " + tblName, null);
@@ -91,7 +91,7 @@ public class DatabaseHandler extends SQLiteOpenHelper
 
 
                 //Log.i("mytag", c.getString(0));
-                myBean[c.getPosition()] = new DBResponseBean(String.valueOf( c.getInt(0)),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5));
+                myBean.add(new DBResponseBean(String.valueOf( c.getInt(0)),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5)));
                 c.moveToNext();
             }
         }

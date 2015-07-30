@@ -10,6 +10,7 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -110,12 +111,19 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
       //  Log.i("goodtest0",a.getResponse());
         if (toggle) {
            startSpeech();
-
+            b.setAlpha((float)0.3);
             toggle = false;
         }else
         {
             speech.destroy();
             toggle = true;
+            b.setAlpha((float)1);
+            String tesxt="";
+            for (String text : textList){
+                tesxt = tesxt + text + ";";
+            }
+            DBResponseBean bean = new DBResponseBean(tesxt,dataHandler.getDate(),dataHandler.getTime(),dataHandler.findLocation()[0],dataHandler.findLocation()[1]);
+            dataService.addResponse(bean);
         }
     }
 
@@ -181,7 +189,7 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
        listAdapter.add(text.toString());
         listAdapter.notifyDataSetChanged();
         DBResponseBean bean = new DBResponseBean(text,dataHandler.getDate(),dataHandler.getTime(),dataHandler.findLocation()[0],dataHandler.findLocation()[1]);
-        dataService.addResponse(bean);
+        //dataService.addResponse(bean);
         //t.setText(text);
        // returnedText.setText(matches.get(0));
     }
@@ -242,4 +250,5 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
         }
         return message;
     }
+
 }

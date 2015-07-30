@@ -23,7 +23,7 @@ public class Fragment2 extends NavigationControl.PlaceholderFragment implements 
     ArrayAdapter<String> listAdapter;
     int[] textIds;
     String[] datetime;
-    DBResponseBean[] beans;
+    ArrayList<DBResponseBean> beans;
     public DatabaseHandler dataService;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,6 +36,7 @@ public class Fragment2 extends NavigationControl.PlaceholderFragment implements 
     @Override
     public void onResume() {
         super.onResume();
+
         list = (ListView) thisActivity.findViewById(R.id.listView2);
         list.setOnItemClickListener(this);
         textList = new ArrayList<String>();
@@ -46,7 +47,9 @@ public class Fragment2 extends NavigationControl.PlaceholderFragment implements 
         dataService.data = a;
         textIds = new int[20];
         datetime = new String[20];
+
         beans = dataService.getResponses(20);
+
         int i = 0;
         for (DBResponseBean bean : beans){
             textIds[i] = bean.getResponse_id();

@@ -17,6 +17,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+
 public class Fragment3 extends NavigationControl.PlaceholderFragment {
     GoogleMap map;
     //double[] Lat = {1,2,3,4,5,6,7,8,9,10};
@@ -24,7 +26,7 @@ public class Fragment3 extends NavigationControl.PlaceholderFragment {
     boolean exists = false;
     boolean count2 = true;
     View rootView;
-    DBResponseBean[] beans;
+    ArrayList<DBResponseBean> beans;
     public DatabaseHandler dataService;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

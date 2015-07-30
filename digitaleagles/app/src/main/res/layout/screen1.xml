@@ -30,7 +30,8 @@
         android:layout_alignParentEnd="true"
         android:layout_margin="10dp"
         android:longClickable="false"
-        android:backgroundTintMode="src_over" />
+        android:backgroundTintMode="src_over"
+        android:alpha="1" />
 
     <TextView
         android:layout_width="wrap_content"

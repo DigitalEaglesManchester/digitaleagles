@@ -62,6 +62,7 @@ public class NavigationControl extends ActionBarActivity
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
+
     }
 
     public void onSectionAttached(int number) {
@@ -88,7 +89,7 @@ public class NavigationControl extends ActionBarActivity
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
-            //getMenuInflater().inflate(R.menu.main, menu);
+           // getMenuInflater().inflate(R.menu.main, menu);
             restoreActionBar();
             return true;
         }
