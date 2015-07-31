@@ -105,13 +105,13 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
     private void promptSpeechInput() {
         if (toggle) {
            startSpeech();
-            b.setAlpha((float)1);
+            b.setAlpha((float)0.3);
             toggle = false;
         }else
         {
             speech.destroy();
             toggle = true;
-            b.setAlpha((float)0.3);
+            b.setAlpha((float)1);
             String tesxt="";
             for (String text : textList){
                 tesxt = tesxt + text + ";";
@@ -170,7 +170,7 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
 
     @Override
     public void onResults(Bundle results) {
-        thisActivity.getApplicationContext().startService(new Intent(thisActivity.getApplicationContext(), TimeDateService.class));
+
 
         speech.destroy();
         startSpeech();
