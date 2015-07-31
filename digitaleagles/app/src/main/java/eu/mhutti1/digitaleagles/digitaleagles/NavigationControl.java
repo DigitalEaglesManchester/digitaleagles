@@ -150,6 +150,7 @@ public class NavigationControl extends ActionBarActivity
             fragment.setArguments(args);
 
             thisActivity = a;
+
             return fragment;
         }
 

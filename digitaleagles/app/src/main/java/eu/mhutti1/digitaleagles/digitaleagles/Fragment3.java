@@ -4,6 +4,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.DrawerLayout.SimpleDrawerListener;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -21,6 +24,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+
+
 
 public class Fragment3 extends NavigationControl.PlaceholderFragment implements OnMapReadyCallback {
     GoogleMap map;
@@ -114,4 +119,9 @@ public class Fragment3 extends NavigationControl.PlaceholderFragment implements 
             thisActivity.getFragmentManager().beginTransaction().remove(myMapFragment).commit();
         }
     }
+
+
+
+
+
 }
