@@ -31,6 +31,7 @@ public class NavigationControl extends ActionBarActivity
     private CharSequence mTitle;
     public String test;
     public LatLng latlon;
+    public String search;
     public int currentId=0;
 
     @Override
@@ -154,17 +155,6 @@ public class NavigationControl extends ActionBarActivity
 
         public PlaceholderFragment() {
         }
-
-
-
-
-
-
-
-
-
-
-        //End Jacques
 
         @Override
         public void onAttach(Activity activity) {

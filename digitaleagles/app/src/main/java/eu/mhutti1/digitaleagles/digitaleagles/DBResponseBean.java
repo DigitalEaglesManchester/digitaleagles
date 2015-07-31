@@ -62,6 +62,7 @@ public class DBResponseBean
         }
 
     }
+
     public int getResponse_id()
     {
         return response_id;
