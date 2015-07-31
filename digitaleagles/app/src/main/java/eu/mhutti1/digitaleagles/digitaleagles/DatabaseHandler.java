@@ -35,7 +35,7 @@ public class DatabaseHandler extends SQLiteOpenHelper
     {
 
         db.execSQL("CREATE TABLE " + tblName + " ( " + colID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " + colResponse + " TEXT, " + colDate + " TEXT , " + colTime + " TEXT, " + colLat + " TEXT, " + colLong + " TEXT )");
-       // db.execSQL("INSERT INTO " + tblName + " (" + colID + ", " + colResponse + ", " + colDate + ", " + colTime + ", " + colLat + ", " + colLong + ") VALUES ('', 'test123', 'monday','miday','mylat','mylong')");
+
     }
 
     @Override
@@ -68,13 +68,10 @@ public class DatabaseHandler extends SQLiteOpenHelper
         DBResponseBean myBean = new DBResponseBean();
         ArrayList<String> bean = new ArrayList<String>();
         Cursor c = data.rawQuery("SELECT * FROM " + tblName + " WHERE "+ colID + " = "+id+"", null);
-        //Cursor c = data.rawQuery("SELECT * FROM " + tblName, null);
+
         if (c.moveToFirst()) {
             while (!c.isAfterLast()) {
-                //bean.add(c.getString(c.getColumnIndex(colResponse)));
 
-
-                //Log.i("mytag", c.getString(0));
                 myBean = new DBResponseBean(String.valueOf( c.getInt(0)),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5));
                 c.moveToNext();
             }
@@ -86,13 +83,10 @@ public class DatabaseHandler extends SQLiteOpenHelper
         ArrayList<DBResponseBean> myBean = new ArrayList<>();
         ArrayList<String> bean = new ArrayList<String>();
         Cursor c = data.rawQuery("SELECT * FROM " + tblName +" ORDER BY "+ colID + " DESC LIMIT "+ number, null);
-        //Cursor c = data.rawQuery("SELECT * FROM " + tblName, null);
+
         if (c.moveToFirst()) {
             while (!c.isAfterLast()) {
-                //bean.add(c.getString(c.getColumnIndex(colResponse)));
 
-
-                //Log.i("mytag", c.getString(0));
                 myBean.add(new DBResponseBean(String.valueOf( c.getInt(0)),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5)));
                 c.moveToNext();
             }
@@ -104,13 +98,10 @@ public class DatabaseHandler extends SQLiteOpenHelper
         ArrayList<DBResponseBean> myBean = new ArrayList<>();
         ArrayList<String> bean = new ArrayList<String>();
         Cursor c = data.rawQuery("SELECT * FROM " + tblName +" WHERE "+colLat +"='"+ String.valueOf(lati.latitude)+"' AND "+colLong+ "='"+String.valueOf(lati.longitude)+ "' ORDER BY "+ colID + " DESC LIMIT "+ number, null);
-        //Cursor c = data.rawQuery("SELECT * FROM " + tblName, null);
+
         if (c.moveToFirst()) {
             while (!c.isAfterLast()) {
-                //bean.add(c.getString(c.getColumnIndex(colResponse)));
 
-
-                //Log.i("mytag", c.getString(0));
                 myBean.add(new DBResponseBean(String.valueOf( c.getInt(0)),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5)));
                 c.moveToNext();
             }

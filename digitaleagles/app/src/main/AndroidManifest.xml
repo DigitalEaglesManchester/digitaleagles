@@ -12,7 +12,6 @@
         android:theme="@style/AppTheme" >
         <uses-library android:name="com.google.android.maps" />
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyBrWySTSMt-TeOCja1fS29Z6z6lN08kaOs"/>
-        <service android:name=".RecognitionService"></service>
 
         <activity
             android:name=".MainActivity"
