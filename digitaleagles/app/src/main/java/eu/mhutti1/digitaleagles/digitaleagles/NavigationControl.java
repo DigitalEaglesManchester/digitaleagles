@@ -74,17 +74,15 @@ public class NavigationControl extends ActionBarActivity
         switch (number) {
             case 1:
                 mTitle = getString(R.string.title_section1);
-
-
                 break;
             case 2:
                 mTitle = getString(R.string.title_section2);
-
-
                 break;
             case 3:
                 mTitle = getString(R.string.title_section3);
-
+                break;
+            case 4:
+                mTitle = "Search";
                 break;
         }
     }
@@ -138,6 +136,9 @@ public class NavigationControl extends ActionBarActivity
                     break;
                 case 3:
                     fragment = new Fragment3();
+                    break;
+                case 4:
+                    fragment = new Fragment4();
                     break;
                 default:
                     fragment = new Fragment1();
