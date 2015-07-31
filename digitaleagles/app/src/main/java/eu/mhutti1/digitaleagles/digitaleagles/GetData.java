@@ -21,12 +21,7 @@ public class GetData extends NavigationControl.PlaceholderFragment{
 
     }
 
-    private final LocationListener mLocationListener = new LocationListener() {
-        @Override
-        public void onLocationChanged(final Location location) {
-            //your code here
-        }
-    };
+
 
     public String[] findLocation()
     {

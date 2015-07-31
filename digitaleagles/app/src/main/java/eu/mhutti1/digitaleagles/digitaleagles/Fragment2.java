@@ -73,7 +73,7 @@ public class Fragment2 extends NavigationControl.PlaceholderFragment implements 
     @Override
     public void onItemClick(AdapterView<?> l, View v, int position, long id) {
 
-        //Toast.makeText(thisActivity.getApplicationContext(),Integer.toString(textIds[position]), Toast.LENGTH_SHORT).show();
+
         listAdapter.clear();
         String response;
         response = beans.get(position).getResponse();

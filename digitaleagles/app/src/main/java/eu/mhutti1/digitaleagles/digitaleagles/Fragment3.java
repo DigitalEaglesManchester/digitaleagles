@@ -23,17 +23,14 @@ import java.util.ArrayList;
 
 public class Fragment3 extends NavigationControl.PlaceholderFragment {
     GoogleMap map;
-    //double[] Lat = {1,2,3,4,5,6,7,8,9,10};
-    //double[] Lng = {1,2,3,4,5,6,7,8,9,10};
-    boolean exists = false;
-    boolean count2 = true;
     View rootView;
     ArrayList<DBResponseBean> beans;
     public DatabaseHandler dataService;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ViewGroup parent =null;
         if (rootView != null) {
-            ViewGroup parent = (ViewGroup) rootView.getParent();
+            parent = (ViewGroup) rootView.getParent();
             if (parent != null) {
                 parent.removeView(rootView);
                 Log.i("ONCREATE DEBUG", "Parent Null - View Removed");
@@ -48,7 +45,11 @@ public class Fragment3 extends NavigationControl.PlaceholderFragment {
         }
         catch (InflateException e) {
             Log.i("ONCREATE DEBUG", "INFLATE EXCEPTION CAUGHT!");
-           // parent.addView(rootView);
+            try {
+                parent.addView(rootView);
+            }catch(NullPointerException i ){
+
+            }
         }
 
         return rootView;
@@ -60,29 +61,24 @@ public class Fragment3 extends NavigationControl.PlaceholderFragment {
     public void onResume() {
         super.onResume();
             map = ((MapFragment) thisActivity.getFragmentManager().findFragmentById(R.id.map)).getMap();
-        //for(int i=1; i< Lat.length; i++){
-            //LatLng Loc = new LatLng(Lat[i], Lng[i]);
+
 
             map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 
                 @Override
                 public boolean onMarkerClick(Marker arg0) {
-                   String id = arg0.getTitle();
                     FragmentManager fragmentManager = getFragmentManager();
                     fragmentManager.beginTransaction()
                             .replace(R.id.container, NavigationControl.PlaceholderFragment.newInstance(2, thisActivity))
                             .commit();
                     NavigationControl act = (NavigationControl)thisActivity;
                     act.latlon = arg0.getPosition();
-                    // Toast toast = Toast.makeText(thisActivity.getApplicationContext(), "This is a message displayed in a Toast", Toast.LENGTH_SHORT);
-                      //  toast.show();
-                   // }
+
                     return true;
                 }
 
             });
             GetData data = new GetData();
-            String [] LatLong = data.findLocation();
             String Date = data.getDate();
             String Time  = data.getTime();
             Log.i("test",Date);

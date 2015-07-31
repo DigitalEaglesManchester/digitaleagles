@@ -64,11 +64,7 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
         progressBar = (ProgressBar) thisActivity.findViewById(R.id.progressBar);
         t = (TextView)thisActivity.findViewById(R.id.textView);
         AudioManager amanager=(AudioManager)thisActivity.getSystemService(Context.AUDIO_SERVICE);
-        //amanager.setStreamMute(AudioManager.STREAM_NOTIFICATION, true);
-        //amanager.setStreamMute(AudioManager.STREAM_ALARM, true);
         amanager.setStreamMute(AudioManager.STREAM_MUSIC, true);
-        //amanager.setStreamMute(AudioManager.STREAM_RING, true);
-        //amanager.setStreamMute(AudioManager.STREAM_SYSTEM, true);
         list = (ListView) thisActivity.findViewById(R.id.listView);
         textList = new ArrayList<String>();
         listAdapter = new ArrayAdapter<String>(thisActivity, android.R.layout.simple_list_item_1, textList);
@@ -84,7 +80,6 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
     public TextView t;
 
     public void demoButton(){
-        //demoOutput.setText("hi");
         promptSpeechInput();
     }
     public void demoClick(View view){
@@ -100,15 +95,16 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
-            /*recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 5000);
+            /*
+            These have been disabled by the Android Speech service and although it would be great to coniniously
+             record speech without small "deaf spots" google have not supported this since jellybean.
+
+            recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 5000);
             recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 5000);*/
         speech.startListening(recognizerIntent);;
 
     }
     private void promptSpeechInput() {
-    //    DBResponseBean[] beanArray = dataService.getResponses(20);
-     //   DBResponseBean a = dataService.getResponse(1);
-      //  Log.i("goodtest0",a.getResponse());
         if (toggle) {
            startSpeech();
             b.setAlpha((float)0.3);
@@ -171,27 +167,24 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
         String errorMessage = getErrorText(errorCode);
         Log.d(LOG_TAG, "FAILED " + errorMessage);
         speech.startListening(recognizerIntent);
-        //returnedText.setText(errorMessage);
-        //toggleButton.setChecked(false);
+
     }
 
     @Override
     public void onResults(Bundle results) {
         thisActivity.getApplicationContext().startService(new Intent(thisActivity.getApplicationContext(), TimeDateService.class));
-        //add stuff
+
         speech.destroy();
         startSpeech();
-        //speech.startListening(recognizerIntent);
+
         Log.i(LOG_TAG, "onResults");
         ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
         String text = matches.get(0);
-        //Toast.makeText(thisActivity.getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+
        listAdapter.add(text.toString());
         listAdapter.notifyDataSetChanged();
         DBResponseBean bean = new DBResponseBean(text,dataHandler.getDate(),dataHandler.getTime(),dataHandler.findLocation()[0],dataHandler.findLocation()[1]);
-        //dataService.addResponse(bean);
-        //t.setText(text);
-       // returnedText.setText(matches.get(0));
+
     }
 
 
