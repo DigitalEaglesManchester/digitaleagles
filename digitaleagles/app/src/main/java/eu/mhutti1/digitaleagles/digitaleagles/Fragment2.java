@@ -54,11 +54,20 @@ public class Fragment2 extends NavigationControl.PlaceholderFragment implements 
         datetime = new String[20];
         NavigationControl act = (NavigationControl) thisActivity;
         LatLng latng = act.latlon;
+        String search = act.search;
         if (latng!=null) {
             beans = dataService.getResponses(20, latng);
         }else{
-            beans = dataService.getResponses(20);
+
+            if (search!=null){
+                beans = dataService.getResponses(20,search);
+
+            }else{
+                beans = dataService.getResponses(20);
+            }
         }
+
+
 
         int i = 0;
         for (DBResponseBean bean : beans){
@@ -79,7 +88,7 @@ public class Fragment2 extends NavigationControl.PlaceholderFragment implements 
         response = beans.get(position).getResponse();
         ArrayList<String> parts = new ArrayList<String>(Arrays.asList(response.split(";")));
         for(String part : parts){
-            listAdapter.add(part);
+            listAdapter.add(part.replace("*","'"));
         }
         listAdapter.notifyDataSetChanged();
     }

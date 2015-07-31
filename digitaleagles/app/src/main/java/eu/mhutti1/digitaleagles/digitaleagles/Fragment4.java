@@ -2,6 +2,7 @@ package eu.mhutti1.digitaleagles.digitaleagles;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,12 +37,18 @@ public class Fragment4 extends NavigationControl.PlaceholderFragment {
         txt = (EditText) thisActivity.findViewById(R.id.searchText);
         Button button = (Button) thisActivity.findViewById(R.id.search);
         super.onResume();
+
         try {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.i("TEST", txt.getText().toString());
-
+                   //Log.i("TEST", txt.getText().toString());
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.container, NavigationControl.PlaceholderFragment.newInstance(2, thisActivity))
+                            .commit();
+                    NavigationControl act = (NavigationControl)thisActivity;
+                    act.search =  txt.getText().toString();
                 }
             });
         }catch (Exception e){

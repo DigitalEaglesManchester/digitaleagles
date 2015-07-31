@@ -113,7 +113,7 @@ public class DatabaseHandler extends SQLiteOpenHelper
     public ArrayList<DBResponseBean> getResponses(int number, String query){
         ArrayList<DBResponseBean> myBean = new ArrayList<>();
         ArrayList<String> bean = new ArrayList<String>();
-        Cursor c = data.rawQuery("SELECT * FROM " + tblName + " WHERE " + colResponse + " LIKE " + "%" + query + "%", null);
+        Cursor c = data.rawQuery("SELECT * FROM " + tblName + " WHERE " + colResponse + " LIKE " + "'%" + query + "%'", null);
 
         if (c.moveToFirst()) {
             while (!c.isAfterLast()) {
