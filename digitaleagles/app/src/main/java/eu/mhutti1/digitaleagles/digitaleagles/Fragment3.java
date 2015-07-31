@@ -15,17 +15,19 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 ;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
-public class Fragment3 extends NavigationControl.PlaceholderFragment {
+public class Fragment3 extends NavigationControl.PlaceholderFragment implements OnMapReadyCallback {
     GoogleMap map;
     View rootView;
     ArrayList<DBResponseBean> beans;
     public DatabaseHandler dataService;
+    MapFragment myMapFragment;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup parent =null;
@@ -61,8 +63,8 @@ public class Fragment3 extends NavigationControl.PlaceholderFragment {
     public void onResume() {
         super.onResume();
             map = ((MapFragment) thisActivity.getFragmentManager().findFragmentById(R.id.map)).getMap();
-
-
+            myMapFragment = ((MapFragment) thisActivity.getFragmentManager().findFragmentById(R.id.map));
+            myMapFragment.getMapAsync(this);
             map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 
                 @Override
@@ -78,6 +80,7 @@ public class Fragment3 extends NavigationControl.PlaceholderFragment {
                 }
 
             });
+
             GetData data = new GetData();
             String Date = data.getDate();
             String Time  = data.getTime();
@@ -99,4 +102,16 @@ public class Fragment3 extends NavigationControl.PlaceholderFragment {
     }
 
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        Log.i("test", "this event is being called");
+
+    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (myMapFragment != null){
+            thisActivity.getFragmentManager().beginTransaction().remove(myMapFragment).commit();
+        }
+    }
 }

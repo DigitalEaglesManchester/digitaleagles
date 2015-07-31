@@ -80,10 +80,7 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
     public void demoButton(){
         promptSpeechInput();
     }
-    public void demoClick(View view){
 
-
-    }
     private void startSpeech(){
         speech = SpeechRecognizer.createSpeechRecognizer(thisActivity);
         speech.setRecognitionListener(this);

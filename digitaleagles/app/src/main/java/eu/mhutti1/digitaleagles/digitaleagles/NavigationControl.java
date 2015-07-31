@@ -31,6 +31,7 @@ public class NavigationControl extends ActionBarActivity
     private CharSequence mTitle;
     public String test;
     public LatLng latlon;
+    public int currentId=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,9 +102,13 @@ public class NavigationControl extends ActionBarActivity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container,PlaceholderFragment.newInstance(position + 1,this))
-                .commit();
+        try {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, PlaceholderFragment.newInstance(position + 1, this))
+                    .commit();
+        }catch (Exception e){
+
+        }
     }
     public static class PlaceholderFragment extends Fragment {
         /**
@@ -118,6 +123,11 @@ public class NavigationControl extends ActionBarActivity
          */
         public static PlaceholderFragment newInstance(int sectionNumber, Activity a) {
             PlaceholderFragment fragment;
+            NavigationControl b = (NavigationControl) a;
+            if(sectionNumber ==b.currentId && sectionNumber!=2){
+                return null;
+            }
+            b.currentId =sectionNumber;
             switch (sectionNumber){
 
                 case 1:
@@ -136,6 +146,7 @@ public class NavigationControl extends ActionBarActivity
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
+
             thisActivity = a;
             return fragment;
         }
