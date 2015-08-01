@@ -42,6 +42,7 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
     public ArrayList<String> textList;
     public DatabaseHandler dataService;
     GetData dataHandler;
+    public Boolean on = false;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -83,34 +84,47 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
     }
 
     private void startSpeech(){
-        speech = SpeechRecognizer.createSpeechRecognizer(thisActivity);
-        speech.setRecognitionListener(this);
-        recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en");
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, thisActivity.getPackageName());
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
+        if (on) {
+            speech = SpeechRecognizer.createSpeechRecognizer(thisActivity);
+            speech.setRecognitionListener(this);
+            recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en");
+            recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, thisActivity.getPackageName());
+            recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
+            recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
+            recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
             /*
             These have been disabled by the Android Speech service and although it would be great to coniniously
              record speech without small "deaf spots" google have not supported this since jellybean.
 
             recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 5000);
             recognizerIntent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 5000);*/
-        speech.startListening(recognizerIntent);;
+            speech.startListening(recognizerIntent);
+
+        }
 
     }
     private void promptSpeechInput() {
         if (toggle) {
-           startSpeech();
+            listAdapter.clear();
+            listAdapter.notifyDataSetChanged();
+            t.setText("");
+            on = true;
+            startSpeech();
             b.setAlpha((float)0.3);
             toggle = false;
+
         }else
         {
-            speech.destroy();
+            on = false;
+            stopVoiceRecognition();
             toggle = true;
             b.setAlpha((float)1);
             String tesxt="";
+            if (t.getText().toString()!=""){
+                listAdapter.add(t.getText().toString());
+                listAdapter.notifyDataSetChanged();
+            }
             for (String text : textList){
                 tesxt = tesxt + text + ";";
             }
@@ -136,7 +150,7 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
     public void onPause() {
         super.onPause();
         if (speech != null) {
-            //speech.destroy();
+            stopVoiceRecognition();
             Log.i(LOG_TAG, "destroy");
         }
 
@@ -162,7 +176,7 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
     public void onError(int errorCode) {
         String errorMessage = getErrorText(errorCode);
         Log.d(LOG_TAG, "FAILED " + errorMessage);
-        speech.startListening(recognizerIntent);
+        startSpeech();
 
     }
 
@@ -170,21 +184,32 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
     public void onResults(Bundle results) {
 
 
-        speech.cancel();
-        //speech.destroy();
-        speech.startListening(recognizerIntent);
+        stopVoiceRecognition();
+        startSpeech();
 
         Log.i(LOG_TAG, "onResults");
         ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
         String text = matches.get(0);
-
+        t.setText("");
        listAdapter.add(text.toString());
         listAdapter.notifyDataSetChanged();
         DBResponseBean bean = new DBResponseBean(text,dataHandler.getDate(),dataHandler.getTime(),dataHandler.findLocation()[0],dataHandler.findLocation()[1]);
 
     }
 
+    public void stopVoiceRecognition()
+    {
 
+
+        if (speech != null) {
+            speech.stopListening();
+            speech.cancel();
+            speech.destroy();
+
+            speech = null;
+        }
+
+    }
     @Override
     public void onPartialResults(Bundle partialResults) {
         ArrayList<String> matches = partialResults.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
@@ -218,23 +243,22 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
                 break;
             case SpeechRecognizer.ERROR_NO_MATCH:
                 message = "No match";
-                speech.destroy();
+                stopVoiceRecognition();
                 startSpeech();
                 break;
             case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
                 message = "RecognitionService busy";
-                speech.destroy();
-                android.os.SystemClock.sleep(1000);
+                stopVoiceRecognition();
                 startSpeech();
                 break;
             case SpeechRecognizer.ERROR_SERVER:
                 message = "error from server";
-                speech.destroy();
+                stopVoiceRecognition();
                 startSpeech();
                 break;
             case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
                 message = "No speech input";
-                speech.destroy();
+                stopVoiceRecognition();
                 //startSpeech();
                 break;
             default:

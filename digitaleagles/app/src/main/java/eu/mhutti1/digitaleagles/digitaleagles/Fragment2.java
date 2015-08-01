@@ -1,16 +1,21 @@
 package eu.mhutti1.digitaleagles.digitaleagles;
 
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.internal.widget.AdapterViewCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,14 +27,16 @@ import java.util.Arrays;
 /**
  * Created by Isaac on 28/07/2015.
  */
-public class Fragment2 extends NavigationControl.PlaceholderFragment implements AdapterView.OnItemClickListener {
+public class Fragment2 extends NavigationControl.PlaceholderFragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     ListView list;
     ArrayList<String> textList;
     ArrayAdapter<String> listAdapter;
     int[] textIds;
     String[] datetime;
     ArrayList<DBResponseBean> beans;
+
     public DatabaseHandler dataService;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -41,9 +48,13 @@ public class Fragment2 extends NavigationControl.PlaceholderFragment implements 
     @Override
     public void onResume() {
         super.onResume();
+       // ImageButton
+
 
         list = (ListView) thisActivity.findViewById(R.id.listView2);
         list.setOnItemClickListener(this);
+        list.setOnItemLongClickListener(this);
+        //list.seton
         textList = new ArrayList<String>();
         listAdapter = new ArrayAdapter<String>(thisActivity, android.R.layout.simple_list_item_1, textList);
         list.setAdapter(listAdapter);
@@ -55,6 +66,9 @@ public class Fragment2 extends NavigationControl.PlaceholderFragment implements 
         NavigationControl act = (NavigationControl) thisActivity;
         LatLng latng = act.latlon;
         String search = act.search;
+
+
+
         if (latng!=null) {
             beans = dataService.getResponses(20, latng);
         }else{
@@ -78,21 +92,44 @@ public class Fragment2 extends NavigationControl.PlaceholderFragment implements 
         }
         listAdapter.notifyDataSetChanged();
     }
-
+Boolean shorta =true;
     @Override
     public void onItemClick(AdapterView<?> l, View v, int position, long id) {
 
-
-        listAdapter.clear();
-        String response;
-        response = beans.get(position).getResponse();
-        ArrayList<String> parts = new ArrayList<String>(Arrays.asList(response.split(";")));
-        for(String part : parts){
-            listAdapter.add(part.replace("*","'"));
+        if (shorta) {
+            listAdapter.clear();
+            String response;
+            response = beans.get(position).getResponse();
+            ArrayList<String> parts = new ArrayList<String>(Arrays.asList(response.split(";")));
+            for (String part : parts) {
+                listAdapter.add(part.replace("*", "'"));
+            }
+            listAdapter.notifyDataSetChanged();
+            shorta = false;
         }
-        listAdapter.notifyDataSetChanged();
+
     }
 
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> l, View v, int position, long id)  {
+                Log.i("test", String.valueOf(position));
+
+        String response = beans.get(position).getResponse();
+        //ArrayList<String> parts = new ArrayList<String>(Arrays.asList(response.split(";")));
+        //for (String part : parts) {
+         //   listAdapter.add(part.replace("*", "'"));
+        //}
+
+        String shareBody =  response.replace(";","\n\n");
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        startActivity(Intent.createChooser(sharingIntent, "Share Using"));
+
+        return true;
+    }
 
 
 }

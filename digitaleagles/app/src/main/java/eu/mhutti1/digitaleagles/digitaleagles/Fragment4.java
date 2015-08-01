@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -43,6 +44,11 @@ public class Fragment4 extends NavigationControl.PlaceholderFragment {
                 @Override
                 public void onClick(View v) {
                    //Log.i("TEST", txt.getText().toString());
+                    InputMethodManager inputManager = (InputMethodManager)
+                            thisActivity.getSystemService(thisActivity.getApplicationContext().INPUT_METHOD_SERVICE);
+
+                    inputManager.hideSoftInputFromWindow(thisActivity.getCurrentFocus().getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
                     FragmentManager fragmentManager = getFragmentManager();
                     fragmentManager.beginTransaction()
                             .replace(R.id.container, NavigationControl.PlaceholderFragment.newInstance(2, thisActivity))

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="eu.mhutti1.digitaleagles.digitaleagles" >
+    package="eu.mhutti1.digitaleagles.digitaleagles"
+    android:versionCode="2"
+    android:versionName="0.2">
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />

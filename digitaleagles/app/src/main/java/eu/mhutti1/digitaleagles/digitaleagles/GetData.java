@@ -28,9 +28,15 @@ public class GetData extends NavigationControl.PlaceholderFragment{
 
         LocationManager lm = (LocationManager) thisActivity.getSystemService(Context.LOCATION_SERVICE);
         Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-        double longitude = location.getLongitude();
-        double latitude = location.getLatitude();
+        double longitude;
+        double latitude;
+        if (location == null){
+            longitude = 0;
+          latitude = 0;
+        }else {
+            longitude = location.getLongitude();
+           latitude = location.getLatitude();
+        }
         String slatitude = Double.toString(latitude);
         String slongitude = Double.toString(longitude);
         String[] LatLong = {slatitude,slongitude};;
