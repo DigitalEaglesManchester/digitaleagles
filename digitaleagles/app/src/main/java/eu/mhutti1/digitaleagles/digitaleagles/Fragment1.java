@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.ArrayList;
@@ -87,7 +88,7 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
         recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en");
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, thisActivity.getPackageName());
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
             /*
@@ -169,8 +170,9 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
     public void onResults(Bundle results) {
 
 
-        speech.destroy();
-        startSpeech();
+        speech.cancel();
+        //speech.destroy();
+        speech.startListening(recognizerIntent);
 
         Log.i(LOG_TAG, "onResults");
         ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
@@ -208,9 +210,11 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
                 break;
             case SpeechRecognizer.ERROR_NETWORK:
                 message = "Network error";
+                Toast.makeText(thisActivity.getApplicationContext(), "No Network Detected", Toast.LENGTH_SHORT).show();
                 break;
             case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
                 message = "Network timeout";
+                Toast.makeText(thisActivity.getApplicationContext(), "Insufficient Network Connectivity", Toast.LENGTH_SHORT).show();
                 break;
             case SpeechRecognizer.ERROR_NO_MATCH:
                 message = "No match";
@@ -220,6 +224,7 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
             case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
                 message = "RecognitionService busy";
                 speech.destroy();
+                android.os.SystemClock.sleep(1000);
                 startSpeech();
                 break;
             case SpeechRecognizer.ERROR_SERVER:
@@ -230,7 +235,7 @@ public class Fragment1 extends NavigationControl.PlaceholderFragment  implements
             case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
                 message = "No speech input";
                 speech.destroy();
-                startSpeech();
+                //startSpeech();
                 break;
             default:
                 message = "Didn't understand, please try again.";
