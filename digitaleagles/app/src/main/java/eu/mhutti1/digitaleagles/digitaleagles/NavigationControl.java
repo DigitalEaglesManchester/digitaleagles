@@ -132,6 +132,8 @@ public class NavigationControl extends ActionBarActivity
                 return null;
             }
             b.currentId =sectionNumber;
+            b.latlon = null;
+            b.search=null;
             switch (sectionNumber){
 
                 case 1:

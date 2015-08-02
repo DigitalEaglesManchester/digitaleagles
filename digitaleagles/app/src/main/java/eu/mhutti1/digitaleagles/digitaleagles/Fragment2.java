@@ -51,6 +51,7 @@ public class Fragment2 extends NavigationControl.PlaceholderFragment implements 
        // ImageButton
 
 
+
         list = (ListView) thisActivity.findViewById(R.id.listView2);
         list.setOnItemClickListener(this);
         list.setOnItemLongClickListener(this);
@@ -71,10 +72,12 @@ public class Fragment2 extends NavigationControl.PlaceholderFragment implements 
 
         if (latng!=null) {
             beans = dataService.getResponses(20, latng);
+            latng = null;
         }else{
 
             if (search!=null){
                 beans = dataService.getResponses(20,search);
+                search = null;
 
             }else{
                 beans = dataService.getResponses(20);
